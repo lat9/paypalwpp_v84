@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>PayPal&reg; Express Checkout Using NVP 84.0</title>
+
+<style type="text/css">
+<!--
+a, a:active, a:visited { color: #006666; text-decoration: none; }
+a:hover { color:#00CC99; text-decoration: underline; }
+BODY, P, H1, H2, H3, H4, H5, H6, LI, TD, DD, DT { font-family: Verdana, AvantGarde, Tahoma, Arial, sans-serif; font-size: 10pt; color: black; padding: 0px;  margin: 20px; }
+H1, H2, H3, H4 { font-weight: bold; }
+h1 { font-size: 20px; }
+h2 { font-size: 16px; }
+code { padding-left: 25px; }
+ol li { margin-left: 0; }
+.corefile { color: red; }
+.removed { text-decoration: line-through; }
+.added { color: blue; }
+.changed { color: green; }
+.minspacing li { margin: 0; }
+ol li, ul li { margin-top: 5px; margin-bottom: 5px; }
+ul li ul { padding-left: 0; }
+-->
+</style>
+</head>
+
+<body>
+<h1>PayPal&reg; Express Checkout Using NVP 84.0</h1>
+<h3>Version 1.0.0 by lat9</h3>
+<p>Current Support Thread at Zen Cart Forums: <a href="http://www.zen-cart.com/showthread.php?211542-PayPal-Express-Checkout-Using-NVP-84-0-Support-Thread">http://www.zen-cart.com/showthread.php?211542-PayPal-Express-Checkout-Using-NVP-84-0-Support-Thread</a></p>
+
+<h2>Version History:</h2>
+<ul>
+  <li>v1.0.0, 2013-12-31: Initial release.</li>
+</ul>
+
+<hr />
+<h2>Operation</h2>
+<p>This Zen Cart payment method replaces the processing for the built-in <em>PayPal Express Checkout</em> (paypalwpp) module, using the more recent Name/Value Pair (NVP) interfaces introduced in NVP interface versions 63.0 to 84.0; refer to <a href="https://www.paypalobjects.com/webstatic/en_US/developer/docs/pdf/pp_nvpapi_developerguide.pdf" target="_blank">PayPal Name/Value Pair API Developer Guide</a> for additional information. This payment method is, essentially, a building block for future payment methods that might choose to implement additional PayPal functionality.</p>
+<p>If you have previously installed one of the other PayPal payment methods, that payment method must be removed before you can install the <b>paypalwpp_v84</b> payment method.</p>
+
+<h3>Processing Differences</h3>
+<p>This payment module was created using the source code for the Zen Cart v1.5.2-RC2 <em>paypalwpp</em> payment method, so those PayPal changes and payment method improvements have been built in!  That said, there are a couple of differences in the module's operation (besides the interface change):</p>
+<ol>
+  <li>Unlike the built-in <em>PayPal Express Checkout</em> payment method, this plugin supports <b>only</b> the <em>PayPal</em> mode of operation.  If your store requires either <em>PayFlow-UK</em> or <em>PayFlow-US</em> mode, you should continue to use the built-in version.</li>
+  <li>This payment method introduces another selection for the <b>Require Confirmed Address</b> setting &mdash; <em>Always</em>.  This setting's choices are now:<ul>
+    <li><b>No</b> &hellip; a &quot;Confirmed Address&quot; from PayPal is <b>never</b> required. This setting is the default.</li>
+    <li><b>Yes</b> &hellip; a &quot;Confirmed Address&quot; is required <b>only</b> if the customer is not currently logged in, i.e. the customer has clicked the &quot;PayPal Express Checkout&quot; button to start the payment process.</li>
+    <li><b>Always</b> &hellip; a &quot;Confirmed Address&quot; is <b>always</b> required &mdash; even if the customer is logged in.  If your store does not collect full address information during account creation, I suggest that you use this setting.</li>
+  </ul></li>
+  <li>The display of an order's PayPal history now includes the entire history as part of the <em>Customers->Orders->Edit Order</em> display. The following screenshot shows, for example, a transaction that was paid using the payment method, disputed and subsequently resolved. <img src="ipn_info.jpg" alt="Order Information Screen" /></li>
+</ol>
+
+<hr />
+<h2>Installation</h2>
+<p>There are are two <span class="corefile">core-file overwrites</span> in this plugin. The changes to <em>ipn_main_handler.php</em> are simply additional notification points to allow this and future modules to operate without additional changes to that module. The change to <em>tpl_ec_button.php</em> allows that module to properly display the &quot;Express Checkout&quot; button when this module is enabled.</p>
+<ol>
+  <li>Make a backup of your Zen Cart's files and database.</li>
+  <li>Copy the files to your cart, after renaming the <b>YOUR_TEMPLATE</b> folder to match your Zen Cart template's name:
+  <ol class="minspacing">
+    <li><span class="corefile">/ipn_main_handler.php</span></li>
+    <li>/includes/auto_loaders/config.paypalwpp_v84.php</li>
+    <li>/includes/classes/observers/class.paypalwpp_v84_observer.php</li>
+    <li>/includes/languages/english/modules/payment/paypalwpp_v84.php</li>
+    <li>/includes/modules/pages/login/header_php_paypalwpp_v84.php</li>
+    <li>/includes/modules/payment/paypalwpp_v84.php</li>
+    <li>/includes/modules/payment/paypal/paypal_curl_v84.php</li>
+    <li>/includes/modules/payment/paypal/paypalwpp_v84_admin_notification.php</li>
+    <li><span class="corefile">/includes/modules/payment/paypal/tpl_ec_button.php</span></li>
+    <li>/includes/templates/YOUR_TEMPLATE/templates/tpl_shopping_cart_default.php</li>
+  </ol></li>
+  <li>Remove any other Zen Cart PayPal payment modules</li>
+  <li>Install the <b>PayPal Express Checkout (NVP 84.0)</b> payment method using your admin's <em>Modules-&gt;Payment</em> screen.</li>
+</ol>
+
+<hr />
+<h2>Un-install</h2>
+<p>Use your admin's <em>Modules-&gt;Payment</em> and remove the <b>PayPal Express Checkout (NVP 84.0)</b> module.  You can restore the <span class="corefile">core file overwrites</span> and the template file to the pre-installation version, but leaving them will not have any adverse affects on your store's operation.  Finally, delete the new files provided by this plugin.</p>
+</body>
+</html>
