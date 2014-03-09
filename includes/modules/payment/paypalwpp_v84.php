@@ -348,7 +348,18 @@ class paypalwpp_v84 extends base {
 
       // debug output
       $this->zcLog('before_process - EC-4', 'info being submitted:' . "\n" . $_SESSION['paypal_ec_token'] . ' ' . $_SESSION['paypal_ec_payer_id'] . ' ' . number_format($order_amount, 2) .  "\n" . print_r($options, true));
-
+//-bof-v1.1.0a
+      $this->options = $options;
+      $this->doECpayment = true;
+      $this->notify('NOTIFY_PAYPALWPP_B4_DOEXPRESS');
+      $options = $this->options;
+      unset ($this->options);
+      
+      if (!$this->doECpayment) {
+        $this->notify('NOTIFY_PAYPALWPP_BEFORE_PROCESS_NOECPAYMENT');
+        return;
+      }
+//-eof-v1.1.0a
       $response = $doPayPal->DoExpressCheckoutPayment($_SESSION['paypal_ec_token'],
                                                       $_SESSION['paypal_ec_payer_id'],
                                                       $options);
@@ -1590,6 +1601,12 @@ class paypalwpp_v84 extends base {
     /**
      * Ask PayPal for the token with which to initiate communications
      */
+//-bof-v1.1.0a
+    $this->options = $options;
+    $this->notify('NOTIFY_PAYPALWPP_SET_1');
+    $options = $this->options;
+    unset ($this->options);
+//-eof-v1.1.0a
     $response = $doPayPal->SetExpressCheckout($return_url, $cancel_url, $options);
 
 
@@ -1618,6 +1635,12 @@ class paypalwpp_v84 extends base {
       if ($amt != $calculatedAmount) $amt = $calculatedAmount;
 //      echo ' newAMT:'.$amt;
       $options['PAYMENTREQUEST_0_AMT'] = $amt;
+//-bof-v1.1.0a
+      $this->options = $options;
+      $this->notify('NOTIFY_PAYPALWPP_SET_2');
+      $options = $this->options;
+      unset ($this->options);
+//-eof-v1.1.0a
       $response = $doPayPal->SetExpressCheckout($return_url, $cancel_url, $options);
 //echo '<br>2nd submission. {'.$response['L_ERRORCODE0'].'}<pre>'.print_r($options, true);
     }
@@ -1637,6 +1660,12 @@ class paypalwpp_v84 extends base {
       $calculatedAmount = $itemamt + $taxamt + $shipamt;
       if ($amt != $calculatedAmount) $amt = $calculatedAmount;
       $options['PAYMENTREQUEST_0_AMT'] = $amt;
+//-bof-v1.1.0a
+      $this->options = $options;
+      $this->notify('NOTIFY_PAYPALWPP_SET_3');
+      $options = $this->options;
+      unset ($this->options);
+//-eof-v1.1.0a
       $response = $doPayPal->SetExpressCheckout($return_url, $cancel_url, $options);
 //echo '<br>3rd submission. {'.$response['L_ERRORCODE0'].'}<pre>'.print_r($options, true);
     }
