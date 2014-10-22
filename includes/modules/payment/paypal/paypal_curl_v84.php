@@ -58,7 +58,7 @@ class paypal_curl_v84 extends base {
                             CURLOPT_FOLLOWLOCATION => FALSE,
                             CURLOPT_SSL_VERIFYPEER => FALSE,
                             CURLOPT_SSL_VERIFYHOST => 2,
-                            CURLOPT_SSLVERSION => 3,
+//                            CURLOPT_SSLVERSION => 3,  20141022-lat9-POODLE change, see http://www.zen-cart.com/showthread.php?214916-Important-announcement-about-POODLE-and-payment-security&p=1261900#post1261900
                             CURLOPT_FORBID_REUSE => TRUE,
                             CURLOPT_FRESH_CONNECT => TRUE,
                             CURLOPT_POST => TRUE,
